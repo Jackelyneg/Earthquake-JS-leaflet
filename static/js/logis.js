@@ -2,39 +2,94 @@ let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.g
 
 var myMap = L.map("map", {
     center: [40.7, -73.95],
-    zoom: 11
-  });
-  
-  // Adding the tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(myMap);
+    zoom: 3
+});
+
+// Adding the tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(myMap);
+
+
 
 //magnitude size
-function markerColor(mag){
-    if (mag > 6 ) return "red";
-    else if (mag > 5) return "FF8C00";
-    else if (mag > 4) return "#Forange";
-    else if (mag > 3) return "yellow";
-    else if (mage>2) return "#FFFACD";
-    else return "#9ACD32";
-
-}
+// function markerSize(mag){
+//     return mag * 2
+// }
 
 
-  d3.json(url).then(function(response) {
-      L.geoJson(response,{
-          style:function(feature){
-              return{
-              color:markerColor(feature.properties.mag),
-              fillOpacity :0.5
-              };
-          },
+d3.json(url).then(function (response) {
+    function styleInfo(feature){
+        return {
+            color: "#000000",
+            opacity: 1,
+            fillOpacity: 1,
+            stroke: true,
+            weight: 0.5,
+            radius: getRadius(feature.properties.mag),
+            fillColor: markerColor(feature.properties.mag)
+        }
+    }
+    function getRadius(mag){
+        if (mag === 0){
+            return 1;
+        }
+        return mag * 4
+    }
+    function markerColor(mag) {
+        if (mag > 6) return "#98ee00";
+        else if (mag > 5) return "#d4ee00";
+        else if (mag > 4) return "#eecc00";
+        else if (mag > 3) return "#ee9c00";
+        else if (mag > 2) return "#ea822c";
+        else return "ea2c2c";
+
+
+
+    }
+    L.geoJson(response, {
+        pointToLayer: function(feature,latlong){
+            return L.circleMarker(latlong);
+        },
+        style: styleInfo,
+            
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("<h5>" + feature.properties.mag)
+        }
+
+
+    }).addTo(myMap);
+
+    let legend = L.control({
+        position: "bottomright"
+    });
+
+    legend.onAdd = function(){
+        var div = L.DomUtil.create("div", "info legendStyle");
+
+        let mag = [6, 5, 4, 3, 2, "<=2"];
+        var colors = [
+          "#98ee00",
+          "#d4ee00",
+          "#eecc00",
+          "#ee9c00",
+          "#ea822c",
+          "#ea2c2c"
+        ];
+
+        for(i=0;i<mag.length;i++){
+            div.innerHTML += "<icolor style='background: " + colors[i] + "'></icolor> "
+            + mag[i] + (mag[i + 1] ? "&ndash;" + mag[i + 1] + "<br>" : "+");
+
+        }
+        return div;
+        
+    };
+
+    legend.addTo(myMap);
 
 
 
 
 
-      }).addTo(myMap);
-
-  });
+})
