@@ -2,7 +2,7 @@ let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.g
 
 var myMap = L.map("map", {
     center: [40.7, -73.95],
-    zoom: 3.5
+    zoom: 4
 });
 
 // Adding the tile layer
@@ -54,7 +54,7 @@ d3.json(url).then(function (response) {
         style: styleInfo,
             
         onEachFeature: function (feature, layer) {
-            layer.bindPopup("<h5>" + feature.properties.mag)
+            layer.bindPopup(`<h5>  magnitude size: ${feature.properties.mag} <br> location: ${feature.properties.place}`)
         }
 
 
