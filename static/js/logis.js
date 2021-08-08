@@ -2,7 +2,7 @@ let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.g
 
 var myMap = L.map("map", {
     center: [40.7, -73.95],
-    zoom: 4
+    zoom: 5
 });
 
 // Adding the tile layer
