@@ -34,7 +34,7 @@ d3.json(url).then(function (response) {
         if (mag === 0){
             return 1;
         }
-        return mag * 4
+        return mag * 2
     }
     function markerColor(mag) {
         if (mag > 6) return "#98ee00";
