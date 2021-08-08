@@ -2,7 +2,7 @@ let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_month.g
 
 var myMap = L.map("map", {
     center: [40.7, -73.95],
-    zoom: 3
+    zoom: 3.5
 });
 
 // Adding the tile layer
@@ -65,17 +65,12 @@ d3.json(url).then(function (response) {
     });
 
     legend.onAdd = function(){
-        var div = L.DomUtil.create("div", "info legendStyle");
+        let div = L.DomUtil.create("div", "info legendStyle");
 
-        let mag = [6, 5, 4, 3, 2, "<=2"];
-        var colors = [
-          "#98ee00",
-          "#d4ee00",
-          "#eecc00",
-          "#ee9c00",
-          "#ea822c",
-          "#ea2c2c"
-        ];
+        let mag = [6, 5, 4, 3, 2,1];
+        
+        var colors = ["#98ee00", "#d4ee00",  "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"];
+    
 
         for(i=0;i<mag.length;i++){
             div.innerHTML += "<icolor style='background: " + colors[i] + "'></icolor> "
@@ -93,3 +88,18 @@ d3.json(url).then(function (response) {
 
 
 })
+
+
+// let mag = [6, 5, 4, 3, 2, "<=2"];
+// var colors = [
+//   "#98ee00",
+//   "#d4ee00",
+//   "#eecc00",
+//   "#ee9c00",
+//   "#ea822c",
+//   "#ea2c2c"
+// ];
+
+// for(i=0;i<mag.length;i++){
+//     div.innerHTML += "<icolor style='background: " + colors[i] + "'></icolor> "
+//     + mag[i] + (mag[i + 1] ? "&ndash;" + mag[i + 1] + "<br>" : "+");
